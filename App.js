@@ -149,18 +149,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems:'center',
   },
-  rederCourse: {          // This forces the list to take up the available space
+  rederCourse: {          
     width: '100%',
     paddingHorizontal: 20,
     marginTop: 20,
   },
   goalItem: {
-    backgroundColor: '#fac34e', // Matching your app's theme color
+    backgroundColor: '#fac34e', 
     padding: 15,
     marginVertical: 8,
     borderRadius: 10,
-    elevation: 3,               // Adds a tiny shadow on Android
-    shadowColor: '#000',        // Adds a tiny shadow on iOS
+    elevation: 3,               
+    shadowColor: '#000',       
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
