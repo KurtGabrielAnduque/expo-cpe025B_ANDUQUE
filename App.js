@@ -33,7 +33,7 @@ export default function App() {
           onChangeText={goalsInputHandler} 
           value={enteredGoalText}   
         />
-
+ 
         <Pressable 
           style={({ pressed }) => [
             styles.button,
