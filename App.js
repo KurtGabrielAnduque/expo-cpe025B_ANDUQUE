@@ -29,8 +29,6 @@ function HomeScreen({ navigation }) {
       </View>
       
       <GoalInput addGoalHandler={addGoalHandler} />
-
-      {/* 2. Use your new modular component and tell it to navigate on press! */}
       <Register onNavigate={() => navigation.navigate('Register')} />
 
       <View style={styles.cont2}>
