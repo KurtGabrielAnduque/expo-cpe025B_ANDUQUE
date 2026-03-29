@@ -12,7 +12,7 @@ function Register(props) {
         
         onPress={props.onNavigate}
       >
-        <Text style={styles.login}>Register</Text>
+        <Text style={styles.login}>Register Now</Text>
       </Pressable>
     </View>
   );
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     flex: 0.75,
     marginBottom: 10,
     justifyContent: 'center',
+    alignItems:'center',
     paddingBottom: 20,
     paddingHorizontal: 20,
   },
@@ -55,5 +56,11 @@ const styles = StyleSheet.create({
     fontWeight: '800',          
     letterSpacing: 2,           
     textAlign: 'center',
+  },
+  newbie:{
+    fontSize:18,
+    marginBottom:10,
+    borderBottomWidth:2,
+    paddingHorizontal:15,
   }
 });

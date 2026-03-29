@@ -7,7 +7,7 @@ function RegisterScreen() {
       <View style={styles.subcontainer}>
         <TextInput placeholder='USER NAME' style={styles.userInput}/>
         <TextInput placeholder='STUDENT NUMBER' style={styles.userInput}/>
-        <TextInput placeholder='PASSWORD' style={styles.userInput}/>
+        <TextInput secureTextEntry={true} placeholder='PASSWORD' style={styles.userInput}/>
         <Pressable
                 style={({ pressed }) => [
                   styles.button,

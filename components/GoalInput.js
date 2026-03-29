@@ -3,6 +3,10 @@ import { useState } from "react";
 
 function GoalInput(props){
   const [enteredGoalText, setEnteredGoalText] = useState('');
+  // lets verify the status of the button while we do each properties
+  const [status, setStatus] = useState('Idle');
+  const [isHovered, setIsHovered] = useState(false);
+
 
   function goalsInputHandler(enteredText){
     setEnteredGoalText(enteredText);
@@ -26,12 +30,22 @@ function GoalInput(props){
             <Pressable 
                 style={({ pressed }) => [
                 styles.button,
-                pressed && styles.buttonPressed 
+                pressed && styles.buttonPressed,
+                isHovered && styles.buttonPressed 
                 ]} 
-                onPress={addGoalHandler}>
+                unstable_pressDelay={80000}
 
-                <Text style={styles.buttonText}>ADD</Text>
+                onPressIn={() => {
+                  console.log('PressIn triggered after delay');
+                  setStatus('onPressIn (Delayed)');
+                }}
+                onPressOut={() => setStatus('onPressOut')}
+                >
+                
+
+                <Text style={styles.buttonText}>Add Goal</Text>
             </Pressable>
+            <Text style={styles.statusResult}>{status}</Text>
         </View>
     );
 };
@@ -82,5 +96,11 @@ const styles = StyleSheet.create({
     fontWeight: '800',          
     letterSpacing: 2,           
     textAlign: 'center',
+  },
+  statusResult:{
+    marginTop:10,
+    fontSize:17,
+    fontWeight:500,
   }
+
 });

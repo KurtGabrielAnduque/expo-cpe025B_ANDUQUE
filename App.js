@@ -6,12 +6,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import GoalItem from './components/GoalItem';
 import GoalInput from './components/GoalInput';
-import Register from './components/Register'; // Import your new module
-import RegisterScreen from './screens/RegisterTab';   // Import your new screen
+import Register from './components/Register'; 
+import RegisterScreen from './screens/RegisterTab';
 
 const Stack = createNativeStackNavigator();
 
-// 1. Move your original App code into this HomeScreen component
+
 function HomeScreen({ navigation }) {
   const [courseGoals, setCourseGoals] = useState([]);
 
@@ -48,7 +48,6 @@ function HomeScreen({ navigation }) {
   );
 }
 
-// 3. App.js is now just a container for your navigation routes
 export default function App() {
   return (
     <NavigationContainer>
@@ -56,7 +55,7 @@ export default function App() {
         <Stack.Screen 
           name="Home" 
           component={HomeScreen} 
-          options={{ headerShown: false }} // Hides the default top bar
+          options={{ headerShown: false }} 
         />
         <Stack.Screen 
           name="Register" 
@@ -72,6 +71,7 @@ const styles = StyleSheet.create({
     margin:0,
     backgroundColor: '#fac34e',
     flex:1,
+    marginTop:30,
   },
   header:{
     flex:1,
@@ -120,34 +120,6 @@ const styles = StyleSheet.create({
     marginTop:10,
     marginBottom:25
   },
-  button: {
-    backgroundColor: '#1E1E1E', 
-    paddingVertical: 16,        
-    paddingHorizontal: 50,      
-    borderRadius: 30,           
-    elevation: 8,               
-    shadowColor: '#000',       
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    width:'70%',
-    alignSelf:'center'
-  },
-  buttonPressed: {
-    opacity: 0.75,              
-    transform: [{ scale: 0.95 }], 
-  },
-  login:{
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '800',          
-    letterSpacing: 2,           
-    textAlign: 'center',
-  },
-  newbie:{
-    fontSize:18,
-    marginBottom:10,
-    borderBottomWidth:2,
-  }
+  
   
 });
