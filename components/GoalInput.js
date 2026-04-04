@@ -33,6 +33,48 @@ function GoalInput(props){
                 pressed && styles.buttonPressed,
                 isHovered && styles.buttonPressed 
                 ]} 
+                onPress={()=>{
+                  addGoalHandler();
+                  setStatus('Course Added Successfully');
+                }}
+                /*
+                // AFTER RELEASE OF FINGER IN BUTTON
+                onPressOut={() => setStatus('onPressOut Activated')}
+
+                //LONG PRESS ON BUTTON
+                onLongPress={() => setStatus('OnLongPress Activated')}
+
+                //WHEN MOVING FINGERS INSIDE THE BUTTON
+                onPressMove={() => setStatus('OnPressMove Activated')}
+                
+                // WHEN PRESS THE BUTTON
+                onPressIn={() => setStatus('OnPressIn Acivated')}
+
+                // HOVER IN BUT IT ONLY WORKS IN PC
+                onHoverIn={() => {
+                  setIsHovered(true);
+                  setStatus('HoveredIn');
+                }}*/
+                /*
+
+                // HOVER OUT BUT IT ONLY WORKS IN PC
+                onHoverOut={() => {
+                  setIsHovered(false);
+                  setStatus('HoveredIn');
+                }}
+
+                // DISABLE BUTTON
+                disabled={true}
+
+                // ENLARGE HITBOX
+                hitSlop={{ top: 50, bottom: 50, left: 50, right: 20 }}
+                
+                // ACCEPT ENTRY FOR BUTTON HOLDS
+                delayLongPress={800}
+                onLongPress={()=> setStatus('Delay longpress accepted')}
+
+
+                // DELAYING PRESSIN
                 unstable_pressDelay={80000}
 
                 onPressIn={() => {
@@ -40,8 +82,8 @@ function GoalInput(props){
                   setStatus('onPressIn (Delayed)');
                 }}
                 onPressOut={() => setStatus('onPressOut')}
+                */
                 >
-                
 
                 <Text style={styles.buttonText}>Add Goal</Text>
             </Pressable>

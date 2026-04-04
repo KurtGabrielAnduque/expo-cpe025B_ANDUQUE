@@ -1,26 +1,43 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Modal, Pressable } from 'react-native';
 import { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import GoalItem from './components/GoalItem';
 import GoalInput from './components/GoalInput';
 import Register from './components/Register'; 
 import RegisterScreen from './screens/RegisterTab';
+import HomeScreen  from './screens/HomeScreenTab';
 
-const Stack = createNativeStackNavigator();
+import { Ionicons } from '@expo/vector-icons';
 
+// Since we are new in creating the tab lets import instead
+// import the bottom tab creator
+const Tab = createBottomTabNavigator();
 
-function HomeScreen({ navigation }) {
+function AppScreen({ navigation }) {
   const [courseGoals, setCourseGoals] = useState([]);
+  const [tooMuchVisible, setTooMuchVisible] = useState(false);
 
   function addGoalHandler(enteredGoalText){
     setCourseGoals((currentCourseGoals) => [
       ...currentCourseGoals,
       { text: enteredGoalText, id: Math.random().toString() }
     ]);
+    
+    if (courseGoals.length > 5){
+      setTooMuchVisible(true);
+    }
   };
+
+  // add the new deleter function
+  function deleteGoalHandler(id) {
+    setCourseGoals((currentCourseGoals) => {
+      return currentCourseGoals.filter((goal) => goal.id !== id);
+    });
+  }
 
   return (
     <View style={styles.appContainer}>
@@ -28,8 +45,29 @@ function HomeScreen({ navigation }) {
         <Text style={styles.headertext}>Welcome To Course Tracker</Text>
       </View>
       
+      <Modal
+          animationType="fade"
+          transparent={true}
+          visible={tooMuchVisible}
+          onRequestClose={() => {
+            Alert.alert('Login Modal has been closed.');
+            setTooMuchVisible(!tooMuchVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+                <Text style={styles.modalText}>Warning</Text>
+                <Text style={styles.Subtext}>Bro you taking too much course pls calm down '_'</Text>
+                <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => setTooMuchVisible(!setTooMuchVisible)}>
+                    <Text style={styles.buttonFont}>Cancel</Text>
+                </Pressable>
+            </View>
+          </View>
+        </Modal>
+      
+
       <GoalInput addGoalHandler={addGoalHandler} />
-      <Register onNavigate={() => navigation.navigate('Register')} />
 
       <View style={styles.cont2}>
         <Text style={styles.notif}>Current Courses Taking</Text>
@@ -38,7 +76,12 @@ function HomeScreen({ navigation }) {
             data={courseGoals}
             keyExtractor={(item) => item.id}
             renderItem={(itemData) => (
-                <GoalItem text={itemData.item.text} />
+                <GoalItem 
+                // get the id so we can delete specific course
+                text={itemData.item.text} 
+                id={itemData.item.id}
+                onDeleteItem={deleteGoalHandler}
+                />
             )}
           />
         </View>
@@ -48,23 +91,43 @@ function HomeScreen({ navigation }) {
   );
 }
 
-export default function App() {
-  return (
+const homeName = 'Home';
+const appName = 'Tracker';
+const regName = 'Account';
+
+export default function App(){
+  return(
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen 
-          name="Home" 
-          component={HomeScreen} 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="Register" 
-          component={RegisterScreen} 
-        />
-      </Stack.Navigator>
+      <Tab.Navigator
+      initialRouteName={homeName}
+      screenOptions = {({ route }) => ({
+        headerShown: false,
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName;
+          
+          if(route.name === 'Home'){
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Tracker'){
+            iconName = focused ? 'list' : 'list-outline';
+          }else if (route.name === 'Account'){
+            iconName = focused ? 'person' : 'person-outline';
+          }
+          return <Ionicons name={iconName} color = {color} size = {size}/>
+        },
+        tabBarActiveTintColor: '#fac34e',
+        tabBarInactiveTintColor: 'gray',
+      })} 
+      >
+
+        <Tab.Screen name = {homeName} component={HomeScreen}/>
+        <Tab.Screen name = {appName} component={AppScreen}/>
+        <Tab.Screen name = {regName} component={RegisterScreen}/>
+      </Tab.Navigator>
     </NavigationContainer>
-  );
+  )
 }
+
+
 
 const styles = StyleSheet.create({
   appContainer:{
@@ -88,7 +151,7 @@ const styles = StyleSheet.create({
   },
   headertext:{
     fontSize:25,
-    fontWeight:500,
+    fontWeight:'500',
     paddingBottom:10,
     paddingHorizontal:20,
     borderBottomWidth:3,
@@ -120,6 +183,50 @@ const styles = StyleSheet.create({
     marginTop:10,
     marginBottom:25
   },
-  
-  
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    paddingHorizontal:10,
+    paddingVertical:20,
+    alignItems: 'center',
+    elevation: 5,
+    width: '80%',
+    height: '40%',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom:50,
+  },
+  buttonClose: {
+    backgroundColor: '#fac34e',
+  },
+  Subtext:{
+    fontSize:18,
+    textAlign:'center',
+    marginBottom:50,
+  },
+  button: {
+    backgroundColor: '#1E1E1E',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    margin: 15,
+    width: '60%',
+    borderRadius: 20
+  },
+  buttonFont: {
+    fontSize: 18,
+    color: 'black',
+    textAlign: 'center',
+    fontWeight:500
+  }
 });
