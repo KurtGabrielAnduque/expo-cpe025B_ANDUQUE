@@ -1,13 +1,35 @@
 import { StyleSheet, Text, View, Pressable, Modal, Alert } from 'react-native';
 import { useState } from 'react';
+// 1. Import Reanimated Layout Transitions!
+import Animated, { 
+  FadeInRight, 
+  FadeOutLeft, 
+  Layout, 
+  useSharedValue, 
+  useAnimatedStyle, 
+  withSpring 
+} from 'react-native-reanimated';
 
 function GoalItem(props) {
   const [WardelVisible, setWardelVisible] = useState(false);
-  return (
-    <View style={styles.goalItem}>
 
+  // 2. Shared value for the 'X' button squish
+  const deleteScale = useSharedValue(1);
+  const animatedDeleteStyle = useAnimatedStyle(() => {
+    return { transform: [{ scale: deleteScale.value }] };
+  });
+
+  return (
+    // 3. The Magic! We wrap the whole item in Animated.View and add layout props
+    <Animated.View 
+      entering={FadeInRight.duration(500)} // Slides in when created
+      exiting={FadeOutLeft.duration(400)}  // Slides out when deleted
+      layout={Layout.springify()}          // Other items smoothly slide up
+      style={styles.goalItem}
+    >
       <Text style={styles.goalText}>{props.text}</Text>
 
+      {/* Your Modal logic remains completely untouched! */}
       <Modal
         animationType="fade"
         transparent={true}
@@ -22,13 +44,13 @@ function GoalItem(props) {
               <Text style={styles.Subtext}>Are you sure to delete this course?</Text>
               <Pressable
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => setWardelVisible(!setWardelVisible)}>
+                  onPress={() => setWardelVisible(false)}>
                   <Text style={styles.buttonFont}>Cancel</Text>
               </Pressable>
               <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => {
-                    setWardelVisible(!setWardelVisible); 
+                    setWardelVisible(false); 
                     props.onDeleteItem(props.id);}}>
                   <Text style={styles.buttonFont}>Delete</Text>
               </Pressable>
@@ -36,14 +58,18 @@ function GoalItem(props) {
         </View>
       </Modal>
 
+      {/* 4. We animate the View inside the Pressable for the 'X' button */}
       <Pressable 
+        onPressIn={() => deleteScale.value = withSpring(0.7)}
+        onPressOut={() => deleteScale.value = withSpring(1)}
         onPress={() => setWardelVisible(true)} 
-        style={({ pressed }) => [styles.deleteButton, pressed && styles.pressedItem]}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} 
       >
-        <Text style={styles.deleteText}>✕</Text>
+        <Animated.View style={[styles.deleteButton, animatedDeleteStyle]}>
+          <Text style={styles.deleteText}>✕</Text>
+        </Animated.View>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -60,8 +86,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    
-    
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -70,7 +94,6 @@ const styles = StyleSheet.create({
     color: '#333333',
     fontSize: 16,
     fontWeight: 'bold',
-    
     flex: 1, 
     marginRight: 10, 
   },
@@ -87,9 +110,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-  pressedItem: {
-    opacity: 0.5,
-  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -105,10 +125,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
     width: '80%',
-    height: '40%',
   },
   modalText: {
-    marginBottom: 15,
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
@@ -132,8 +150,8 @@ const styles = StyleSheet.create({
   },
   buttonFont: {
     fontSize: 18,
-    color: 'black',
+    color: 'white', // Changed to white so it's readable against the dark button!
     textAlign: 'center',
-    fontWeight:500
+    fontWeight: '500' // Added quotes to prevent web errors
   }
 });

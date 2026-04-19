@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable, Modal } from 'react-native';
 import { useState } from 'react';
-import { Ionicons } from '@expo/vector-icons'; // Using the icons from your app
+import { Ionicons } from '@expo/vector-icons'; 
 
 function RegisterScreen() {
   // State for our new welcome pop-up
